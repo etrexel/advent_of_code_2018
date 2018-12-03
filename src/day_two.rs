@@ -57,6 +57,34 @@ fn exactly_three_duplicates(input: &str) -> bool {
     output
 }
 
+fn distance(first: &String, second: &String) -> i32 {
+    let mut distance: i32 = 0;
+    let size: i32 = first.len() as i32;
+    let mut first_chars = first.chars();
+    let mut second_chars = second.chars();
+    for _ in 0..size {
+        if first_chars.next() != second_chars.next() {
+            distance += 1;
+        }
+    }
+    distance
+}
+
+fn common_letters(first: &String, second: &String) -> String {
+    let mut output: String = String::new();
+    let size: i32 = first.len() as i32;
+    let mut first_chars = first.chars();
+    let mut second_chars = second.chars();
+    for _ in 0..size {
+        let current_first = first_chars.next();
+        let current_second = second_chars.next();
+        if current_first == current_second {
+            output.push(current_first.unwrap())
+        }
+    }
+    output
+}
+
 pub fn part_one(path: &Path) {
     let input: Vec<String> = get_input(path);
 
@@ -73,4 +101,25 @@ pub fn part_one(path: &Path) {
     }
 
     println!("Checksum: {}", two_duplicates * three_duplicates);
+}
+
+pub fn part_two(path: &Path) {
+    let input: Vec<String> = get_input(path);
+
+    let mut i: usize = 0;
+    let mut j: usize = i + 1;
+
+    loop {
+        if distance(&input[i], &input[j]) == 1 {
+            break;
+        }
+        j += 1;
+        if j >= input.len() {
+            i += 1;
+            j = i + 1;
+        }
+    }
+
+    let output: String = common_letters(&input[i], &input[j]);
+    println!("Common letters: {}", output);
 }
